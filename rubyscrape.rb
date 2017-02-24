@@ -17,15 +17,21 @@ def scrape(artist_name, song_title)
   :param song_title: title of the song
   :type song_title: str
   :return: lyrics for the given song
-  :rtype: 'unicode' (including newline chars)
+  :rtype: str (including newline chars)
   """
   # the URL uses dashes to separate words
   # and is built in the format 'baseURL/artist-song-lyrics'
   page_url = "https://genius.com/" << linify(artist_name).chomp + "-" + linify(song_title).chomp + "-lyrics"
-  page = Nokogiri::HTML(open(page_url, "User-Agent" => "Mozilla/5.0"))
-  # Genius has a tag called 'lyrics'!
-  lyrics = page.at_css("lyrics")
-  return lyrics.content
+  # catch unsuccessful query attemtps
+  begin
+    page = Nokogiri::HTML(open(page_url, "User-Agent" => "Mozilla/5.0"))
+    # Genius has a tag called 'lyrics'!
+    lyrics = page.at_css("lyrics")
+    return lyrics.content
+  rescue
+    error_msg = "No lyrics found. Please try again."
+    return error_msg
+  end
 end
 
 # getting the input from the user

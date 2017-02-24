@@ -6,6 +6,7 @@ from pprint import pprint
 ## fetch more lyrics at once
 song_dict = {
   "Traicionera" : "Sebastian Yatra",
+  "Traicio" : "Sebasti Yatra",
   "Adentro" : "Calle 13",
   "Me Gustas Tu" : "Manu Chao"
 }
@@ -41,19 +42,23 @@ def scrape(artist_name, song_title):
   # and is built in the format 'baseURL/artist-song-lyrics'
   path = linify(artist_name) + "-" + linify(song_title) + "-lyrics"
   page_url = "http://genius.com/" + path
-  # using the version spoofing to circumvent the 403 error
-  opener = AppURLopener()
-  res = opener.open(page_url)
-  # the roundabout approach returns a 'byte' object
-  # and needs to be converted to 'str'
-  page = res.read().decode('utf-8')
-  # the input is already a 'str', so no need for '.text'
-  html = BeautifulSoup(page, "html.parser")
-  # remove script tags that they put in the middle of the lyrics
-  [h.extract() for h in html('script')]
-  # Genius has a tag called 'lyrics'!
-  lyrics = html.find("lyrics").get_text()
-  return lyrics
+  try:
+    # using the version spoofing to circumvent the 403 error
+    opener = AppURLopener()
+    res = opener.open(page_url)
+    # the roundabout approach returns a 'byte' object
+    # and needs to be converted to 'str'
+    page = res.read().decode('utf-8')
+    # the input is already a 'str', so no need for '.text'
+    html = BeautifulSoup(page, "html.parser")
+    # remove script tags that they put in the middle of the lyrics
+    [h.extract() for h in html('script')]
+    # Genius has a tag called 'lyrics'!
+    lyrics = html.find("lyrics").get_text()
+    return lyrics
+  except:
+    error_msg = "No lyrics found. Please try again."
+    return error_msg
 
 
 ##### make it run requests ######
@@ -67,4 +72,5 @@ for song, artist in song_dict.items():
   # and the fitting lyrics as value
   lyrics_dict[(artist, song)] = lyrics
 
+# check the output by uncommenting
 #pprint(lyrics_dict)

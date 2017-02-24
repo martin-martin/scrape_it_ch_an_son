@@ -23,12 +23,16 @@ def scrape(artist_name, song_title):
   # and is built in the format 'baseURL/artist-song-lyrics'
   path = linify(artist_name) + "-" + linify(song_title) + "-lyrics"
   page_url = "http://genius.com/" + path
-  page = requests.get(page_url)
-  html = BeautifulSoup(page.text, "html.parser")
-  # remove script tags that they put in the middle of the lyrics
-  [h.extract() for h in html('script')]
-  # Genius has a tag called 'lyrics'!
-  lyrics = html.find("lyrics").get_text()
-  return lyrics
+  try:
+    page = requests.get(page_url)
+    html = BeautifulSoup(page.text, "html.parser")
+    # remove script tags that they put in the middle of the lyrics
+    [h.extract() for h in html('script')]
+    # Genius has a tag called 'lyrics'!
+    lyrics = html.find("lyrics").get_text()
+    return lyrics
+  except:
+    error_msg = "No lyrics found. Please try again."
+    return error_msg
 
 print scrape(artist_name, song_title)
