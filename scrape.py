@@ -17,7 +17,7 @@ def scrape(artist_name, song_title):
   :param song_title: title of the song
   :type song_title: str
   :return: lyrics for the given song
-  :rtype: str (including newline chars)
+  :rtype: 'unicode' (including newline chars)
   """
   # the URL uses dashes to separate words
   # and is built in the format 'baseURL/artist-song-lyrics'
@@ -31,4 +31,4 @@ def scrape(artist_name, song_title):
   lyrics = html.find("lyrics").get_text()
   return lyrics
 
-print scrape(artist_name, song_title)
+print type(scrape(artist_name, song_title))
