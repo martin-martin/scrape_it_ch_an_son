@@ -1,10 +1,20 @@
 # ported to python 3.x
 import urllib.request
 from bs4 import BeautifulSoup
+from pprint import pprint
 
-artist_name = input("Enter artist name: ")
-song_title = input("Enter song name: ")
+## fetch more lyrics at once
+song_dict = {
+  "Traicionera" : "Sebastian Yatra",
+  "Adentro" : "Calle 13",
+  "Me Gustas Tu" : "Manu Chao"
+}
 
+## do the user input
+# artist_name = input("Enter artist name: ")
+# song_title = input("Enter song name: ")
+
+## hardcoded
 # song_title = "Traicionera"
 # artist_name = "Sebastian Yatra"
 
@@ -31,7 +41,6 @@ def scrape(artist_name, song_title):
   # and is built in the format 'baseURL/artist-song-lyrics'
   path = linify(artist_name) + "-" + linify(song_title) + "-lyrics"
   page_url = "http://genius.com/" + path
-  print(page_url)
   # using the version spoofing to circumvent the 403 error
   opener = AppURLopener()
   res = opener.open(page_url)
@@ -46,4 +55,16 @@ def scrape(artist_name, song_title):
   lyrics = html.find("lyrics").get_text()
   return lyrics
 
-print(scrape(artist_name, song_title))
+
+##### make it run requests ######
+
+# weld a bucket to catch 'em all
+lyrics_dict = dict()
+
+for song, artist in song_dict.items():
+  lyrics = scrape(artist, song)
+  # create a dict that has a tuple of (artist, song) as key
+  # and the fitting lyrics as value
+  lyrics_dict[(artist, song)] = lyrics
+
+#pprint(lyrics_dict)
