@@ -1,8 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-song_title = "Traicionera"
-artist_name = "Sebastian Yatra"
+artist_name = raw_input("Enter artist name: ")
+song_title = raw_input("Enter song name: ")
 
 def linify(a_string):
   """Replaces whitespace chars in a string for dashes."""
@@ -31,4 +31,4 @@ def scrape(artist_name, song_title):
   lyrics = html.find("lyrics").get_text()
   return lyrics
 
-print type(scrape(artist_name, song_title))
+print scrape(artist_name, song_title)

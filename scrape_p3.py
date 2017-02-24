@@ -2,8 +2,11 @@
 import urllib.request
 from bs4 import BeautifulSoup
 
-song_title = "Traicionera"
-artist_name = "Sebastian Yatra"
+artist_name = input("Enter artist name: ")
+song_title = input("Enter song name: ")
+
+# song_title = "Traicionera"
+# artist_name = "Sebastian Yatra"
 
 class AppURLopener(urllib.request.FancyURLopener):
   """Mimics a different user agent to avoid blocking the request."""
@@ -28,6 +31,7 @@ def scrape(artist_name, song_title):
   # and is built in the format 'baseURL/artist-song-lyrics'
   path = linify(artist_name) + "-" + linify(song_title) + "-lyrics"
   page_url = "http://genius.com/" + path
+  print(page_url)
   # using the version spoofing to circumvent the 403 error
   opener = AppURLopener()
   res = opener.open(page_url)
